@@ -90,5 +90,6 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>supermarket-pricer-kata</finalName>
     </build>
 </project>
