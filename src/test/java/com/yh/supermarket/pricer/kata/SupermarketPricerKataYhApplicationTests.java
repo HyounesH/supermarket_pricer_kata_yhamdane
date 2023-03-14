@@ -73,8 +73,8 @@ class SupermarketPricerKataYhApplicationTests {
         Assertions.assertArrayEquals(expectedItemsNames, basketItemsNames);
 
 
-        String[] expectedItemsHsCode = Stream.of(beanCanItem.getHsCode(), waterBottleItem.getHsCode(), pastaPackItem.getHsCode()).sorted().toArray(String[]::new);
-        String[] basketItemsHsCode = basket.getItems().keySet().stream().map(Item::getHsCode).sorted().toArray(String[]::new);
+        String[] expectedItemsHsCode = Stream.of(beanCanItem.getId(), waterBottleItem.getId(), pastaPackItem.getId()).sorted().toArray(String[]::new);
+        String[] basketItemsHsCode = basket.getItems().keySet().stream().map(Item::getId).sorted().toArray(String[]::new);
 
         Assertions.assertArrayEquals(expectedItemsHsCode, basketItemsHsCode);
     }

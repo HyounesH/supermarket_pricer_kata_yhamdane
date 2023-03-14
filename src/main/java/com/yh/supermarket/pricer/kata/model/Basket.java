@@ -1,6 +1,7 @@
 package com.yh.supermarket.pricer.kata.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
 public class Basket {
     private String id;
     private BigDecimal total;

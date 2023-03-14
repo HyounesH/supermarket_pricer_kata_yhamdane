@@ -1,35 +1,47 @@
 package com.yh.supermarket.pricer.kata.service.impl;
 
-import com.yh.supermarket.pricer.kata.model.Basket;
 import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
-import com.yh.supermarket.pricer.kata.service.PromotionEngineRuleService;
+import com.yh.supermarket.pricer.kata.repository.PromotionRepository;
 import com.yh.supermarket.pricer.kata.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
+    private final PromotionRepository promotionRepository;
 
-    private final PromotionEngineRuleService promotionEngineRuleService;
+    private List<Promotion> availablePromotions = new ArrayList<>();
 
     @Autowired
-    public PromotionServiceImpl(PromotionEngineRuleService promotionEngineRuleService) {
-        this.promotionEngineRuleService = promotionEngineRuleService;
+    public PromotionServiceImpl(PromotionRepository promotionRepository) {
+        this.promotionRepository = promotionRepository;
     }
 
     @Override
-    public void applyPromotionsOnBasket(Map<Item, Promotion> itemPromotionMap, Basket basket) {
-        BigDecimal basketTotal = BigDecimal.ZERO;
-        for (Map.Entry<Item, Integer> itemEntry : basket.getItems().entrySet()) {
-            if (itemPromotionMap.containsKey(itemEntry.getKey())) {
-                BigDecimal basketEntryPrice = this.promotionEngineRuleService.applyPromotion(itemEntry.getKey(), itemEntry.getValue(), itemPromotionMap.get(itemEntry.getKey()));
-                basketTotal = basketTotal.add(basketEntryPrice);
-            }
+    public List<Promotion> findAllPromotions() {
+        this.availablePromotions = this.promotionRepository.findAll();
+        return availablePromotions;
+    }
+
+    @Override
+    public Promotion addPromotion(Promotion promotion) {
+        return promotionRepository.saveAndFlush(promotion);
+    }
+
+    @Override
+    public Map<Item, Promotion> getPromotionMapByItem() {
+        if (CollectionUtils.isEmpty(this.availablePromotions)) {
+            this.availablePromotions = findAllPromotions();
         }
-        basket.setTotal(basketTotal);
+        return this.availablePromotions.stream().collect(Collectors.toMap(Promotion::getItem, Function.identity()));
     }
 }
