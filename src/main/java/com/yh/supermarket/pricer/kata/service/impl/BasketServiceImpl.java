@@ -1,6 +1,7 @@
 package com.yh.supermarket.pricer.kata.service.impl;
 
 import com.yh.supermarket.pricer.kata.dto.BasketItemDto;
+import com.yh.supermarket.pricer.kata.exceptions.ApplicationException;
 import com.yh.supermarket.pricer.kata.model.Basket;
 import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
@@ -29,7 +30,7 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public BigDecimal calculateBasketTotal(List<BasketItemDto> basketItems, boolean promotion) throws Exception {
+    public BigDecimal calculateBasketTotal(List<BasketItemDto> basketItems, boolean promotion) throws ApplicationException {
         Basket basket = this.buildBasketFromBasketItemDtoList(basketItems);
         if (Boolean.TRUE.equals(promotion)) {
             return calculateBasketTotalWithPromotion(basket);
@@ -49,7 +50,7 @@ public class BasketServiceImpl implements BasketService {
     }
 
 
-    private Basket buildBasketFromBasketItemDtoList(List<BasketItemDto> basketItemDtoList) throws Exception {
+    private Basket buildBasketFromBasketItemDtoList(List<BasketItemDto> basketItemDtoList) throws ApplicationException {
         Basket basket = new Basket();
         for (BasketItemDto basketItemDto : basketItemDtoList) {
             Item item = this.itemService.getItemById(basketItemDto.getItemId());

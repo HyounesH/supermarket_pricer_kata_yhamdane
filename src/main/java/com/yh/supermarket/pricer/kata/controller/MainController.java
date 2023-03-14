@@ -57,13 +57,13 @@ public class MainController {
     }
 
     @PostMapping("/basket/calculate-total-without-promotion")
-    public ResponseEntity<BigDecimal> calculateBasketTotalWithoutPromotion(@RequestBody List<BasketItemDto> basketItems) throws Exception {
+    public ResponseEntity<BigDecimal> calculateBasketTotalWithoutPromotion(@RequestBody List<BasketItemDto> basketItems) {
         log.debug("MainController:: calculate basket total without promotion : [{}]", basketItems);
         return ResponseEntity.ok(basketService.calculateBasketTotal(basketItems, false));
     }
 
     @PostMapping("/basket/calculate-total-with-promotion")
-    public ResponseEntity<BigDecimal> calculateBasketTotalWitPromotion(@RequestBody List<BasketItemDto> basketItems) throws Exception {
+    public ResponseEntity<BigDecimal> calculateBasketTotalWitPromotion(@RequestBody List<BasketItemDto> basketItems) {
         log.debug("MainController:: calculate basket total with promotion : [{}]", basketItems);
         return ResponseEntity.ok(basketService.calculateBasketTotal(basketItems, true));
     }

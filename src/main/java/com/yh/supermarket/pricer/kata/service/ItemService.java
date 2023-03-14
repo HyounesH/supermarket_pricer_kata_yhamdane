@@ -1,6 +1,7 @@
 package com.yh.supermarket.pricer.kata.service;
 
 
+import com.yh.supermarket.pricer.kata.exceptions.ApplicationException;
 import com.yh.supermarket.pricer.kata.model.Item;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface ItemService {
 
     Item addItem(Item item);
 
-    Item getItemById(String id) throws Exception;
+    Item getItemById(String id) throws ApplicationException;
 }
