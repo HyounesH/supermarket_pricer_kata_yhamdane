@@ -6,20 +6,23 @@ import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
 import com.yh.supermarket.pricer.kata.service.PromotionEngineRuleService;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
+@Slf4j
 public class PromotionEngineRuleServiceImpl implements PromotionEngineRuleService {
     @Override
     public BigDecimal applyPromotion(@NonNull Item item, @NonNull Integer itemQuantity, @NonNull Promotion promotion) {
+        log.debug("PromotionEngineRuleServiceImpl:: apply promotion with type {}  for item with id {}, price {}, and with quantity {}", promotion.getType(), item.getId(), item.getPrice(), itemQuantity);
         if (promotion.getType().equals(PromotionTypeEnum.FREE_ITEM)) {
             return applyFreeItemPromotion(item, itemQuantity, promotion.getEligibleQuantityForDiscount());
         } else if (promotion.getType().equals(PromotionTypeEnum.PRICE_QUANTITY_DISCOUNT)) {
             return applyPromotionForDiscountPerQuantity(item, itemQuantity, promotion.getEligibleQuantityForDiscount(), promotion.getPromotionPrice());
         } else if (promotion.getType().equals(PromotionTypeEnum.PRICE_WEIGHT_DISCOUNT)) {
-            return applyPromotionForDiscountPerWeights(item, itemQuantity, promotion.getUnitEnum(), promotion.getEligibleQuantityForDiscount(), promotion.getPromotionPrice());
+            return applyPromotionForDiscountPerWeights(item, itemQuantity, promotion.getPromotionUnit(), promotion.getEligibleQuantityForDiscount(), promotion.getPromotionPrice());
         } else if (promotion.getType().equals(PromotionTypeEnum.COUPON_DISCOUNT)) {
             return applyCouponPromotionDiscount(item, itemQuantity, promotion.getCouponDiscountPercentage());
         } else {
@@ -33,7 +36,7 @@ public class PromotionEngineRuleServiceImpl implements PromotionEngineRuleServic
         if (itemQuantity < eligibleQuantityToGetFreeItem) {
             return item.getPrice().multiply(BigDecimal.valueOf(itemQuantity));
         }
-        int discountQuantity = itemQuantity / (eligibleQuantityToGetFreeItem+1);
+        int discountQuantity = itemQuantity / (eligibleQuantityToGetFreeItem + 1);
         BigDecimal promotionDiscount = item.getPrice().multiply(BigDecimal.valueOf(discountQuantity));
         return calculateTotalPriceAfterDiscount(item.getPrice(), itemQuantity, promotionDiscount);
     }

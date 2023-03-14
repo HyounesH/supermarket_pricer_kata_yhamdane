@@ -1,0 +1,15 @@
+{
+  "id": 4,
+  "item": {
+    "id": "1400154E",
+    "name": "bean can",
+    "price": 0.65,
+    "unit": "POUND"
+  },
+  "itemId": "1400154E",
+  "type": "PRICE_WEIGHT_DISCOUNT",
+  "eligibleQuantityForDiscount": 2,
+  "promotionPrice": 1.0,
+  "promotionUnit": "POUND",
+  "couponDiscountPercentage": 0
+}

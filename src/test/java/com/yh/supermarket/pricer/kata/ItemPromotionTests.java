@@ -6,7 +6,7 @@ import com.yh.supermarket.pricer.kata.model.Basket;
 import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
 import com.yh.supermarket.pricer.kata.service.impl.PromotionEngineRuleServiceImpl;
-import com.yh.supermarket.pricer.kata.service.impl.PromotionServiceImpl;
+import com.yh.supermarket.pricer.kata.service.impl.PromotionEngineServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +19,12 @@ public class ItemPromotionTests {
 
     public static final String BASKET_NAME = "Basket1";
 
-    private PromotionServiceImpl promotionService;
+    private PromotionEngineServiceImpl promotionService;
 
     @BeforeEach()
     public void initTests() {
         PromotionEngineRuleServiceImpl promotionEngineRuleService = new PromotionEngineRuleServiceImpl();
-        this.promotionService = new PromotionServiceImpl(promotionEngineRuleService);
+        this.promotionService = new PromotionEngineServiceImpl(promotionEngineRuleService);
     }
 
     @Test

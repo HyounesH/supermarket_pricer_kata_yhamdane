@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1300554E",
+    "name": "pasta pack",
+    "price": 1.10,
+    "unit": "NONE"
+  },
+  {
+    "id": "1400154E",
+    "name": "bean can",
+    "price": 0.65,
+    "unit": "POUND"
+  },
+  {
+    "id": "1200354E",
+    "name": "water bottle",
+    "price": 0.37,
+    "unit": "NONE"
+  },
+  {
+    "id": "1100354E",
+    "name": "milka chocolate",
+    "price": 0.95,
+    "unit": "NONE"
+  }
+]
