@@ -1,26 +1,26 @@
 package com.yh.supermarket.pricer.kata.service.impl;
 
+import com.yh.supermarket.pricer.kata.factory.PromotionStrategyFactory;
 import com.yh.supermarket.pricer.kata.model.Basket;
 import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
-import com.yh.supermarket.pricer.kata.service.PromotionEngineRuleService;
 import com.yh.supermarket.pricer.kata.service.PromotionEngineService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yh.supermarket.pricer.kata.service.PromotionStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
-@Slf4j
 public class PromotionEngineServiceImpl implements PromotionEngineService {
+    private final Logger log = LoggerFactory.getLogger(PromotionEngineServiceImpl.class);
 
-    private final PromotionEngineRuleService promotionEngineRuleService;
+    private final PromotionStrategyFactory promotionStrategyFactory;
 
-    @Autowired
-    public PromotionEngineServiceImpl(PromotionEngineRuleService promotionEngineRuleService) {
-        this.promotionEngineRuleService = promotionEngineRuleService;
+    public PromotionEngineServiceImpl(PromotionStrategyFactory promotionStrategyFactory) {
+        this.promotionStrategyFactory = promotionStrategyFactory;
     }
 
     @Override
@@ -29,7 +29,9 @@ public class PromotionEngineServiceImpl implements PromotionEngineService {
         BigDecimal basketTotal = BigDecimal.ZERO;
         for (Map.Entry<Item, Integer> itemEntry : basket.getItems().entrySet()) {
             if (itemPromotionMap.containsKey(itemEntry.getKey())) {
-                BigDecimal basketEntryPrice = this.promotionEngineRuleService.applyPromotion(itemEntry.getKey(), itemEntry.getValue(), itemPromotionMap.get(itemEntry.getKey()));
+                Promotion promotion = itemPromotionMap.get(itemEntry.getKey());
+                PromotionStrategy strategy = promotionStrategyFactory.findStrategy(promotion.getType());
+                BigDecimal basketEntryPrice = strategy.applyPromotion(itemEntry.getKey(), itemEntry.getValue(), promotion);
                 basketTotal = basketTotal.add(basketEntryPrice);
             }
         }

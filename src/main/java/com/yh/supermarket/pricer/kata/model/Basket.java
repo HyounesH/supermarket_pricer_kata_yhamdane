@@ -1,15 +1,12 @@
 package com.yh.supermarket.pricer.kata.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
-@NoArgsConstructor
+
 public class Basket {
     private String id;
     private BigDecimal total;
@@ -19,7 +16,13 @@ public class Basket {
         this.id = id;
     }
 
-    public void addItem(@NonNull Item item, @NonNull Integer quantity) {
+    public Basket() {
+
+    }
+
+    public void addItem(Item item, Integer quantity) {
+        Assert.notNull(item, "item should not be null");
+        Assert.notNull(quantity, "quantity should not be null");
         if (quantity < 1) return;
         if (total == null) {
             total = BigDecimal.ZERO;
@@ -33,4 +36,27 @@ public class Basket {
     }
 
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public Map<Item, Integer> getItems() {
+        return items;
+    }
+
+    public void setItems(Map<Item, Integer> items) {
+        this.items = items;
+    }
 }

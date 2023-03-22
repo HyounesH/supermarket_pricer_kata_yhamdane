@@ -3,6 +3,7 @@ package com.yh.supermarket.pricer.kata;
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.yh.supermarket.pricer.kata.controller.MainController;
+import com.yh.supermarket.pricer.kata.factory.PromotionStrategyFactory;
 import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
 import com.yh.supermarket.pricer.kata.service.BasketService;
@@ -10,9 +11,7 @@ import com.yh.supermarket.pricer.kata.service.ItemService;
 import com.yh.supermarket.pricer.kata.service.PromotionEngineService;
 import com.yh.supermarket.pricer.kata.service.PromotionService;
 import com.yh.supermarket.pricer.kata.service.impl.BasketServiceImpl;
-import com.yh.supermarket.pricer.kata.service.impl.PromotionEngineRuleServiceImpl;
 import com.yh.supermarket.pricer.kata.service.impl.PromotionEngineServiceImpl;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,8 +64,7 @@ public class MainControllerTest {
 
 
     @BeforeEach
-    @SneakyThrows
-    public void initTests() {
+    public void initTests() throws IOException {
         if (items.isEmpty()) {
             this.items = this.readDataFromCsvFile("items.csv", Item.class);
         }
@@ -106,17 +104,14 @@ public class MainControllerTest {
             Map<Item, Promotion> itemPromotionMap = promotions.stream().collect(Collectors.toMap(Promotion::getItem, Function.identity()));
             Mockito.when(promotionService.getPromotionMapByItem()).thenReturn(itemPromotionMap);
         }
-
-
-        PromotionEngineRuleServiceImpl promotionEngineRuleService = new PromotionEngineRuleServiceImpl();
-        PromotionEngineService promotionEngineService = new PromotionEngineServiceImpl(promotionEngineRuleService);
+        PromotionStrategyFactory promotionStrategyFactory = new PromotionStrategyFactory();
+        PromotionEngineService promotionEngineService = new PromotionEngineServiceImpl(promotionStrategyFactory);
         this.basketService = new BasketServiceImpl(this.itemService, this.promotionService, promotionEngineService);
 
     }
 
     @Test
-    @SneakyThrows
-    public void test_find_all_items() {
+    public void test_find_all_items() throws Exception {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();
 
@@ -127,8 +122,7 @@ public class MainControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    public void test_create_new_item() {
+    public void test_create_new_item() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/item/add").content(pastaItemAsString).contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assertions.assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
@@ -136,8 +130,7 @@ public class MainControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    public void test_find_all_promotions() {
+    public void test_find_all_promotions() throws Exception {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();
 
@@ -148,8 +141,7 @@ public class MainControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    public void test_create_new_promotion() {
+    public void test_create_new_promotion() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/promotion/add").content(priceWeightDiscountPromotionAsString).contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assertions.assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
@@ -157,8 +149,7 @@ public class MainControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    public void test_calculate_total_without_promotion() {
+    public void test_calculate_total_without_promotion() throws Exception {
         this.mainController = new MainController(promotionService, itemService, this.basketService);
         String baskItemsRequestAsString = readResponseAsString("basketItemsRequest.json");
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();
@@ -168,8 +159,7 @@ public class MainControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    public void test_calculate_total_with_promotion() {
+    public void test_calculate_total_with_promotion() throws Exception {
         this.mainController = new MainController(promotionService, itemService, this.basketService);
         String baskItemsRequestAsString = readResponseAsString("basketItemsRequest.json");
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();

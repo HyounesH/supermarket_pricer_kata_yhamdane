@@ -3,19 +3,12 @@ package com.yh.supermarket.pricer.kata.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opencsv.bean.CsvBindByPosition;
 import com.yh.supermarket.pricer.kata.enums.UnitEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity(name = "item")
-@ToString
 public class Item {
     @Id
     @Column(name = "id")
@@ -35,6 +28,9 @@ public class Item {
     @OneToOne(mappedBy = "item")
     private Promotion promotion;
 
+    public Item() {
+
+    }
 
     public Item(String id, String name, BigDecimal price) {
         this.id = id;
@@ -67,5 +63,51 @@ public class Item {
     @JsonIgnore
     public Promotion getPromotion() {
         return promotion;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", unit=" + unit +
+                '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public UnitEnum getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitEnum unit) {
+        this.unit = unit;
+    }
+
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
     }
 }

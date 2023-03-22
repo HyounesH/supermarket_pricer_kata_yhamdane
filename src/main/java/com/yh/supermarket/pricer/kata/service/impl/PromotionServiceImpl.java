@@ -26,17 +26,35 @@ public class PromotionServiceImpl implements PromotionService {
         this.promotionRepository = promotionRepository;
     }
 
+    /**
+     * find all available promotions
+     *
+     * @return list of available promotions
+     */
+
     @Override
     public List<Promotion> findAllPromotions() {
         this.availablePromotions = this.promotionRepository.findAll();
         return availablePromotions;
     }
 
+    /**
+     * Save promotion in database
+     *
+     * @param promotion
+     * @return the promotion saved in database
+     */
+
     @Override
     public Promotion addPromotion(Promotion promotion) {
         return promotionRepository.saveAndFlush(promotion);
     }
 
+    /**
+     * map list of promotion by item
+     *
+     * @return map list of promotion by item
+     */
     @Override
     public Map<Item, Promotion> getPromotionMapByItem() {
         if (CollectionUtils.isEmpty(this.availablePromotions)) {

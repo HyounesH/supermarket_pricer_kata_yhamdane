@@ -3,17 +3,12 @@ package com.yh.supermarket.pricer.kata.model;
 import com.opencsv.bean.CsvBindByPosition;
 import com.yh.supermarket.pricer.kata.enums.PromotionTypeEnum;
 import com.yh.supermarket.pricer.kata.enums.UnitEnum;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
+
 @Entity(name = "promotion")
-@ToString
 public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +40,9 @@ public class Promotion {
     @CsvBindByPosition(position = 6)
     private Integer couponDiscountPercentage;
 
+    public Promotion() {
+
+    }
 
     public Promotion(Integer id, PromotionTypeEnum promotionType, Integer eligibleQuantityForDiscount, BigDecimal promotionPrice) {
         this.id = id;
@@ -74,4 +72,80 @@ public class Promotion {
     }
 
 
+    @Override
+    public String toString() {
+        return "Promotion{" +
+                "id=" + id +
+                ", itemId='" + itemId + '\'' +
+                ", type=" + type +
+                ", eligibleQuantityForDiscount=" + eligibleQuantityForDiscount +
+                ", promotionPrice=" + promotionPrice +
+                ", promotionUnit=" + promotionUnit +
+                ", couponDiscountPercentage=" + couponDiscountPercentage +
+                '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public PromotionTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(PromotionTypeEnum type) {
+        this.type = type;
+    }
+
+    public Integer getEligibleQuantityForDiscount() {
+        return eligibleQuantityForDiscount;
+    }
+
+    public void setEligibleQuantityForDiscount(Integer eligibleQuantityForDiscount) {
+        this.eligibleQuantityForDiscount = eligibleQuantityForDiscount;
+    }
+
+    public BigDecimal getPromotionPrice() {
+        return promotionPrice;
+    }
+
+    public void setPromotionPrice(BigDecimal promotionPrice) {
+        this.promotionPrice = promotionPrice;
+    }
+
+    public UnitEnum getPromotionUnit() {
+        return promotionUnit;
+    }
+
+    public void setPromotionUnit(UnitEnum promotionUnit) {
+        this.promotionUnit = promotionUnit;
+    }
+
+    public Integer getCouponDiscountPercentage() {
+        return couponDiscountPercentage;
+    }
+
+    public void setCouponDiscountPercentage(Integer couponDiscountPercentage) {
+        this.couponDiscountPercentage = couponDiscountPercentage;
+    }
 }

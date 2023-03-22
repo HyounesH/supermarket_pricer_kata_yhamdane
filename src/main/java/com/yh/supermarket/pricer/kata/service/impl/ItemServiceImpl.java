@@ -19,16 +19,33 @@ public class ItemServiceImpl implements ItemService {
         this.itemRepository = itemRepository;
     }
 
+    /**
+     * Retrieve all available items in Database
+     */
     @Override
     public List<Item> findAllItems() {
         return this.itemRepository.findAll();
     }
+
+    /**
+     * Save an item in the database
+     *
+     * @param item
+     * @return the saved item
+     */
 
     @Override
     public Item addItem(Item item) {
         return this.itemRepository.saveAndFlush(item);
     }
 
+    /**
+     * Get item by id from the database
+     *
+     * @param id : the id of item
+     * @return the item if found
+     * @throws ApplicationException : throw application exception if the item is not found
+     */
     @Override
     public Item getItemById(String id) throws ApplicationException {
         Optional<Item> itemOptional = itemRepository.findById(id);
