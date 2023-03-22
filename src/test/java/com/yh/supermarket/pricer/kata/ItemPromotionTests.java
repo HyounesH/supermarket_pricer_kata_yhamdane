@@ -2,10 +2,10 @@ package com.yh.supermarket.pricer.kata;
 
 import com.yh.supermarket.pricer.kata.enums.PromotionTypeEnum;
 import com.yh.supermarket.pricer.kata.enums.UnitEnum;
+import com.yh.supermarket.pricer.kata.factory.PromotionStrategyFactory;
 import com.yh.supermarket.pricer.kata.model.Basket;
 import com.yh.supermarket.pricer.kata.model.Item;
 import com.yh.supermarket.pricer.kata.model.Promotion;
-import com.yh.supermarket.pricer.kata.service.impl.PromotionEngineRuleServiceImpl;
 import com.yh.supermarket.pricer.kata.service.impl.PromotionEngineServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +23,8 @@ public class ItemPromotionTests {
 
     @BeforeEach()
     public void initTests() {
-        PromotionEngineRuleServiceImpl promotionEngineRuleService = new PromotionEngineRuleServiceImpl();
-        this.promotionService = new PromotionEngineServiceImpl(promotionEngineRuleService);
+        PromotionStrategyFactory promotionStrategyFactory = new PromotionStrategyFactory();
+        this.promotionService = new PromotionEngineServiceImpl(promotionStrategyFactory);
     }
 
     @Test
