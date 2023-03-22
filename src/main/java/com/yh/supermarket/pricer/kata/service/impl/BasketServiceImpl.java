@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class BasketServiceImpl implements BasketService {
@@ -64,7 +65,7 @@ public class BasketServiceImpl implements BasketService {
      * @return return the total amount of basket after promotion discount
      */
     private BigDecimal calculateBasketTotalWithPromotion(Basket basket) {
-        Map<Item, Promotion> promotionMapByItem = this.promotionService.getPromotionMapByItem();
+        Map<Item, Set<Promotion>> promotionMapByItem = this.promotionService.getPromotionMapByItem();
         promotionEngineService.applyPromotionsOnBasket(promotionMapByItem, basket);
         return basket.getTotal();
     }

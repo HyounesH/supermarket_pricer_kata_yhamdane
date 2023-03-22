@@ -8,11 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.*;
 
 
 @Service
@@ -51,15 +47,26 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     /**
-     * map list of promotion by item
+     * map set of promotion by item
      *
-     * @return map list of promotion by item
+     * @return map set of promotion by item
      */
     @Override
-    public Map<Item, Promotion> getPromotionMapByItem() {
+    public Map<Item, Set<Promotion>> getPromotionMapByItem() {
         if (CollectionUtils.isEmpty(this.availablePromotions)) {
             this.availablePromotions = findAllPromotions();
         }
-        return this.availablePromotions.stream().collect(Collectors.toMap(Promotion::getItem, Function.identity()));
+        Map<Item, Set<Promotion>> promotionItemMap = new HashMap<>();
+        for (Promotion promotion : availablePromotions) {
+            Set<Promotion> promotionSet = null;
+            if (promotionItemMap.containsKey(promotion.getItem())) {
+                promotionSet = promotionItemMap.get(promotion.getItem());
+            } else {
+                promotionSet = new HashSet<>();
+            }
+            promotionSet.add(promotion);
+            promotionItemMap.put(promotion.getItem(), promotionSet);
+        }
+        return promotionItemMap;
     }
 }

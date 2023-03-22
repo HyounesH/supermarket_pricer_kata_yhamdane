@@ -33,9 +33,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -101,8 +99,18 @@ public class MainControllerTest {
         Mockito.when(promotionService.findAllPromotions()).thenReturn(this.promotions);
         Mockito.when(promotionService.addPromotion(any(Promotion.class))).thenReturn(priceWeightDiscountPromotion);
         if (!promotions.isEmpty()) {
-            Map<Item, Promotion> itemPromotionMap = promotions.stream().collect(Collectors.toMap(Promotion::getItem, Function.identity()));
-            Mockito.when(promotionService.getPromotionMapByItem()).thenReturn(itemPromotionMap);
+            Map<Item, Set<Promotion>> promotionItemMap = new HashMap<>();
+            for (Promotion promotion : promotions) {
+                Set<Promotion> promotionSet = null;
+                if (promotionItemMap.containsKey(promotion.getItem())) {
+                    promotionSet = promotionItemMap.get(promotion.getItem());
+                } else {
+                    promotionSet = new HashSet<>();
+                }
+                promotionSet.add(promotion);
+                promotionItemMap.put(promotion.getItem(), promotionSet);
+            }
+            Mockito.when(promotionService.getPromotionMapByItem()).thenReturn(promotionItemMap);
         }
         PromotionStrategyFactory promotionStrategyFactory = new PromotionStrategyFactory();
         PromotionEngineService promotionEngineService = new PromotionEngineServiceImpl(promotionStrategyFactory);

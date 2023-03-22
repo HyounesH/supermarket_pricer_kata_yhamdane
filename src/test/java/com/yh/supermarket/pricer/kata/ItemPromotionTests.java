@@ -13,7 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ItemPromotionTests {
 
@@ -42,8 +44,10 @@ public class ItemPromotionTests {
 
         Assertions.assertEquals(1, promotion.getId());
 
-        Map<Item, Promotion> promotionMap = new HashMap<>();
-        promotionMap.put(waterBottleItem, promotion);
+        Map<Item, Set<Promotion>> promotionMap = new HashMap<>();
+        Set<Promotion> promotions = new HashSet<>();
+        promotions.add(promotion);
+        promotionMap.put(waterBottleItem, promotions);
 
         this.promotionService.applyPromotionsOnBasket(promotionMap, basket);
 
@@ -65,8 +69,10 @@ public class ItemPromotionTests {
 
         Promotion promotion = new Promotion(1, PromotionTypeEnum.PRICE_WEIGHT_DISCOUNT, 2, BigDecimal.valueOf(1), UnitEnum.POUND);
 
-        Map<Item, Promotion> promotionMap = new HashMap<>();
-        promotionMap.put(beanCanItem, promotion);
+        Map<Item, Set<Promotion>> promotionMap = new HashMap<>();
+        Set<Promotion> promotions = new HashSet<>();
+        promotions.add(promotion);
+        promotionMap.put(beanCanItem, promotions);
 
         this.promotionService.applyPromotionsOnBasket(promotionMap, basket);
 
@@ -86,8 +92,10 @@ public class ItemPromotionTests {
 
         Promotion promotion = new Promotion(1, PromotionTypeEnum.FREE_ITEM, 2);
 
-        Map<Item, Promotion> promotionMap = new HashMap<>();
-        promotionMap.put(pastaPackItem, promotion);
+        Map<Item, Set<Promotion>> promotionMap = new HashMap<>();
+        Set<Promotion> promotions = new HashSet<>();
+        promotions.add(promotion);
+        promotionMap.put(pastaPackItem, promotions);
 
         this.promotionService.applyPromotionsOnBasket(promotionMap, basket);
 
@@ -107,8 +115,10 @@ public class ItemPromotionTests {
 
         Promotion promotion = new Promotion(1, 70, PromotionTypeEnum.COUPON_DISCOUNT);
 
-        Map<Item, Promotion> promotionMap = new HashMap<>();
-        promotionMap.put(pastaPackItem, promotion);
+        Map<Item, Set<Promotion>> promotionMap = new HashMap<>();
+        Set<Promotion> promotions = new HashSet<>();
+        promotions.add(promotion);
+        promotionMap.put(pastaPackItem, promotions);
 
         this.promotionService.applyPromotionsOnBasket(promotionMap, basket);
 
@@ -133,11 +143,21 @@ public class ItemPromotionTests {
         Promotion promotionCoupon = new Promotion(1, 70, PromotionTypeEnum.COUPON_DISCOUNT);
         Promotion promotionFreeItem = new Promotion(2, PromotionTypeEnum.FREE_ITEM, 4);
         Promotion promotionDiscount = new Promotion(3, PromotionTypeEnum.PRICE_WEIGHT_DISCOUNT, 2, BigDecimal.valueOf(1), UnitEnum.POUND);
+        Map<Item, Set<Promotion>> promotionMap = new HashMap<>();
 
-        Map<Item, Promotion> promotionMap = new HashMap<>();
-        promotionMap.put(pastaPackItem, promotionCoupon);
-        promotionMap.put(waterBottleItem, promotionFreeItem);
-        promotionMap.put(beanCanItem, promotionDiscount);
+        Set<Promotion> pastaPackPromotionSet = new HashSet<>();
+        pastaPackPromotionSet.add(promotionCoupon);
+
+        Set<Promotion> waterBottlePromotionSet = new HashSet<>();
+        waterBottlePromotionSet.add(promotionFreeItem);
+
+        Set<Promotion> beanCanPromotionSet = new HashSet<>();
+        beanCanPromotionSet.add(promotionDiscount);
+
+
+        promotionMap.put(pastaPackItem, pastaPackPromotionSet);
+        promotionMap.put(waterBottleItem, waterBottlePromotionSet);
+        promotionMap.put(beanCanItem, beanCanPromotionSet);
 
         this.promotionService.applyPromotionsOnBasket(promotionMap, basket);
 
